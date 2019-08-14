@@ -8,13 +8,15 @@ lot_shape_desc,land_cont_desc,utilities_desc,lot_conf_desc,land_slope_desc,neigh
 build_type_desc,house_style_desc,overall_qual, overall_cond, year_built,year_remod,
 roof_style_desc,roof_mat_desc,exter_qual,exter_cond,found_type_desc,central_air,el_system_desc,
 low_qual_sqft,abovegr_live_sqft,beds_abovegr,functionality_desc,wooddeck_sqft,fence_desc,
-month_sold, year_sold, sale_type_desc, sale_cond_desc, sale_price
+month_sold, year_sold, sale_type_desc, sale_cond_desc, sale_price, ext_cover_desc as prime_exterior_cover
 FROM 
 units, subclass_lookup,zoning_lookup, street_type_lookup,alley_type_lookup,lot_shape_lookup,
 land_contour_lookup,utilities_lookup,lot_config_lookup,land_slope_lookup,neighborhood_lookup,
 build_type_lookup,house_style_lookup,roof_style_lookup,roof_mat_lookup,found_type_lookup,
-el_system_lookup,functionality_lookup,fence_lookup, sale_unit, sales, sale_type_lookup, sale_cond_lookup
-WHERE 
+el_system_lookup,functionality_lookup,fence_lookup, sale_unit, sales, sale_type_lookup, sale_cond_lookup, 
+ext_cover,exterior_cover_lookup
+WHERE
+ext_cover.ext_cover_no=1 and
 units.subclass_no=subclass_lookup.subclass_no AND units.zoning_code=zoning_lookup.zoning_code
 AND units.str_type=street_type_lookup.str_type AND units.alley_type=alley_type_lookup.alley_type
 AND units.lot_shape=lot_shape_lookup.lot_shape AND units.land_cont=land_contour_lookup.land_cont
@@ -26,7 +28,8 @@ AND units.roof_style=roof_style_lookup.roof_style AND units.roof_mat=roof_mat_lo
 AND units.found_type=found_type_lookup.found_type AND units.el_system=el_system_lookup.el_system
 AND units.functionality=functionality_lookup.functionality AND units.fence=fence_lookup.fence
 AND units.unit_id=sale_unit.unit_id AND sale_unit.sale_id=sales.sale_id
-AND sales.sale_type=sale_type_lookup.sale_type AND sales.sale_cond=sale_cond_lookup.sale_cond;
+AND sales.sale_type=sale_type_lookup.sale_type AND sales.sale_cond=sale_cond_lookup.sale_cond
+AND units.unit_id=ext_cover.unit_id and ext_cover.ext_cover=exterior_cover_lookup.ext_cover;
 
 --basement and sales to measure impact of basement on sale
 CREATE VIEW analytics_basement AS
